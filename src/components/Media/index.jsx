@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import "./style.css";
 
 const Media = ({ media, redirect, selectMedia }) => {
+  const mainPath = "projeto-bloco-frontend";
+
   return (
     <Link
-      to={redirect && `/media/${media.id}`}
+      to={redirect && `/${mainPath}/media/${media.id}`}
       onClick={(e) => selectMedia(e)}
       className="media"
     >

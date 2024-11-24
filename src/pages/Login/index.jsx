@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
+import { toast, Toaster } from "sonner";
 
 const Login = () => {
-  const navigation = useNavigation();
+  const mainPath = "projeto-bloco-frontend";
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,13 +13,17 @@ const Login = () => {
   const [viewPassword, setViewPassword] = useState(false);
 
   function handleLogin() {
+    if(!email) return toast.error("Informe o email")
+    if(!password) return toast.error("Informe a senha")
+
     const login = { email, password };
-    navigation.push("/timeline");
+    navigate(`/${mainPath}/timeline`)
     console.log(login);
   }
 
   return (
     <div className="container-login">
+      <Toaster richColors closeButton theme='dark' position="top-right" />
       <div className="form-container">
         <header>
           <h1>Mosegook</h1>
@@ -49,7 +55,7 @@ const Login = () => {
           </div>
           <div className="form-button-container">
             <button onClick={handleLogin}>Entrar</button>
-            <Link to="signup">Não tem uma conta? Cadastre-se</Link>
+            <Link to={`/${mainPath}/signup`}>Não tem uma conta? Cadastre-se</Link>
           </div>
         </div>
       </div>

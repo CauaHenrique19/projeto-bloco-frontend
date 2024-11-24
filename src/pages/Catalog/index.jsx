@@ -10,7 +10,6 @@ const Catalog = () => {
   const [loading, setLoading] = useState(true);
   const [medias, setMedias] = useState([]);
   const [searchString, setSearchString] = useState();
-  const [categoryId, setCategoryId] = useState(0);
   const [filteredMedias, setFilteredMedias] = useState([]);
 
   useEffect(() => {
@@ -25,7 +24,6 @@ const Catalog = () => {
   }, []);
 
   function handleSearch(search) {
-    setCategoryId(0);
     setSearchString(search);
     const mediasSearched = medias.filter((media) =>
       media.title.toLowerCase().includes(search)
@@ -33,71 +31,9 @@ const Catalog = () => {
     setFilteredMedias(mediasSearched);
   }
 
-  function handleSearchByCategory(categoryId) {
-    setCategoryId(categoryId);
-    setSearchString("");
-    const mediasSearched = medias.filter(
-      (media) => media.category_id === categoryId
-    );
-    setFilteredMedias(mediasSearched);
-  }
-
   return (
     <div className="catalog-container">
       {loading && <Loading />}
-      {/**
-         * 
-         * <div className="menu-catalog-container">
-        <div className="logo-container">
-          <h1>Mosegook</h1>
-        </div>
-        <ul>
-          <button
-            onClick={() => handleSearch("")}
-            className={
-              searchString || categoryId === 0
-                ? "menu-item selected"
-                : "menu-item"
-            }
-          >
-            <ion-icon name="home-outline"></ion-icon>
-            <h2>Início</h2>
-          </button>
-          <button
-            onClick={() => handleSearchByCategory(1)}
-            className={
-              categoryId === 1 && !searchString
-                ? "menu-item selected"
-                : "menu-item"
-            }
-          >
-            <ion-icon name="film-outline"></ion-icon>
-            <h2>Filmes</h2>
-          </button>
-          <button
-            onClick={() => handleSearchByCategory(4)}
-            className={categoryId === 4 ? "menu-item selected" : "menu-item"}
-          >
-            <ion-icon name="videocam-outline"></ion-icon>
-            <h2>Séries</h2>
-          </button>
-          <button
-            onClick={() => handleSearchByCategory(3)}
-            className={categoryId === 3 ? "menu-item selected" : "menu-item"}
-          >
-            <ion-icon name="book-outline"></ion-icon>
-            <h2>Livros</h2>
-          </button>
-          <button
-            onClick={() => handleSearchByCategory(2)}
-            className={categoryId === 2 ? "menu-item selected" : "menu-item"}
-          >
-            <ion-icon name="game-controller-outline"></ion-icon>
-            <h2>Jogos</h2>
-          </button>
-        </ul>
-      </div>
-        */}
       <div className="medias-catalog-container">
         <div className="header-medias-catalog-container">
           <h1>Todas as nossas mídias</h1>
