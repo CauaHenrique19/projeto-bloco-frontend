@@ -1,0 +1,282 @@
+.avaliation-detail-container{
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    background-color: #0f0f0f;
+}
+.avaliation-container{
+    width: 40%;
+}
+.avaliation-container .avaliation-container-header{
+    width: calc(100% - 15px);
+    height: 15vh;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 7px;
+    padding-bottom: 10px;
+}
+.avaliation-container .avaliation-container-header a{
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+}
+.avaliation-container .avaliation-container-header a ion-icon{
+    margin-right: 10px;
+}
+.avaliation-container .form-coment{
+    width: calc(100% - 15px);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(128, 128, 128, 0.205);
+    border-radius: 3px;
+    padding: 15px;
+}
+.avaliation-container .form-coment h1{
+    margin-bottom: 5px;
+}
+.avaliation-container .form-coment textarea{
+    width: 100%;
+    min-height: 100px;
+    height: 70px;
+    background-color: initial;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    resize: vertical;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.205);
+}
+.avaliation-container .form-coment textarea::-webkit-scrollbar{
+    width: 7px;
+}
+.avaliation-container .form-coment textarea::-webkit-scrollbar-thumb{
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+.avaliation-container .form-coment button{
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: blueviolet;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    padding: 5px 15px;
+    border-radius: 50px;
+    transition: background-color 0.3s;
+    align-self: flex-end;
+}
+.avaliation-container .form-coment button ion-icon{
+    margin-right: 10px;
+}
+.avaliation-container .form-coment button:hover{
+    background-color: rgb(106, 21, 185);
+}
+.avaliation-container .avaliations-coments-container .header-avaliations-coments-container{
+    margin: 20px 15px 20px 0;
+}
+.avaliation-container .avaliations-coments-container .coments{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin: 15px 15px 15px 0;
+}
+.avaliation-container .avaliations-coments-container .nothing-container{
+    width: calc(100% - 15px);
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 15px 0 0;
+}
+.avaliation-container .avaliations-coments-container .nothing-container h1{
+    font-size: 2.5rem;
+}
+.avaliation-container .avaliations-coments-container .nothing-container p{
+    font-size: 1.5rem;
+}
+.avaliation-container .avaliation{
+    width: calc(100% - 15px);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 4px;
+    margin-right: 15px;
+    border: 1px solid rgba(128, 128, 128, 0.205);
+    position: relative;
+}
+.avaliation-container .coment{
+    width: calc(100% - 5px);
+}
+.avaliation-container .coment:nth-child(2n){
+    margin-right: 0;
+}
+.avaliation-container .coment:hover{
+    transform: scale(1.05);
+}
+.avaliation-container .avaliation:hover{
+    transform: none;
+}
+.avaliation-container .avaliation:hover .links-coment-container{
+    display: flex;
+}
+.avaliation-container .avaliation .header-coment{
+    min-height: 7vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px;
+}
+.avaliation-container .avaliation .header-coment .info-user{
+    display: flex;
+}
+.avaliation-container .avaliation .header-coment svg{
+    margin-right: 10px;
+}
+.avaliation-container .avaliation .header-coment ion-icon{
+    margin-right: 10px;
+    font-size: 3.1rem;
+    color: rgb(0, 160, 223);
+}
+.avaliation-container .avaliation .header-coment p{
+    color: gray;
+}
+.avaliation-container .avaliation .header-coment .info-post p{
+    width: fit-content;
+    padding: 4px 12px;
+    color: #fafafa;
+    border-radius: 50px;
+    font-size: 0.8rem;
+}
+.avaliation-container .avaliation .content-coment{
+    height: 100%;
+    padding: 10px;
+    font-size: 1.3rem;
+}
+.avaliation-container .avaliation .footer-coment{
+    min-height: 7vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px;
+}
+.avaliation-container .avaliation .footer-coment .info-media{
+    display: flex;
+}
+.avaliation-container .avaliation .footer-coment .info-footer{
+    margin-left: 5px;
+}
+.avaliation-container .avaliation .footer-coment .color-coment{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+}
+.avaliation-container .avaliation .footer-coment .color-coment,
+.avaliation-container .coment .footer-coment .color-coment ion-icon{
+    font-size: 2rem;
+}
+.avaliation-container .avaliation .info-avaliation{
+    display: flex;
+}
+.avaliation-container .avaliation .info-avaliation .amount-coments,
+.avaliation-container .avaliation .info-avaliation .amount-likes{
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding: 4px 12px;
+    margin-right: 5px;
+    border-radius: 50px;
+}
+.avaliation-container .avaliation .info-avaliation .amount-coments ion-icon,
+.avaliation-container .avaliation .info-avaliation .amount-likes ion-icon{
+    margin-right: 5px;
+    font-size: 1.2rem;
+}
+.avaliation-container .avaliation .links-coment-container{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.692);
+    position: absolute;
+    z-index: 10;
+    border-radius: 3px;
+}
+.avaliation-container .avaliation .links-coment-container button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75px;
+    height: 75px;
+    border: 1px solid #fafafa;
+    background-color: initial;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 2rem;
+    transition: background-color 0.3s;
+}
+.avaliation-container .avaliation .links-coment-container button:hover{
+    background-color: white;
+}
+.avaliation-container .avaliation .links-coment-container button:hover ion-icon{
+    color: red;
+}
+@keyframes heart{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.2);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+.media-avaliation-container{
+    width: fit-content;
+    height: 85vh;
+    border-radius: 4px;
+    margin-top: 100px;
+}
+.media-avaliation-container h1{
+    margin-bottom: 10px;
+}
+.media-avaliation-container .media{
+    margin-bottom: 10px;
+}
+.media-avaliation-container .media:hover{
+    box-shadow: 0px 10px 30px 16px rgba(0, 0, 0, 0.233);
+    transform: scale(1.01);
+}
+.media-avaliation-container .genders-avaliation-container{
+    display: grid;
+    grid-template-columns: 95px 95px 95px;
+    gap: 7px;
+}
+.media-avaliation-container .genders-avaliation-container .gender-avaliation-container{
+    width: 95px;
+    height: 95px;
+    border-radius: 3px;
+    background-color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.media-avaliation-container .genders-avaliation-container .gender-avaliation-container p{
+    text-align: center;
+}

@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./login.css";
 import { toast, Toaster } from "sonner";
+
+import { Context } from "../../context";
+
+import "./login.css";
 
 const Login = () => {
   const mainPath = "projeto-bloco-frontend";
   const navigate = useNavigate();
+
+  const { setUser } = useContext(Context);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,17 +18,28 @@ const Login = () => {
   const [viewPassword, setViewPassword] = useState(false);
 
   function handleLogin() {
-    if(!email) return toast.error("Informe o email")
-    if(!password) return toast.error("Informe a senha")
+    if (!email) return toast.error("Informe o email");
+    if (!password) return toast.error("Informe a senha");
 
-    const login = { email, password };
-    navigate(`/${mainPath}/timeline`)
-    console.log(login);
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const findedUser = users.find((user) => user.email === email);
+
+    if (!findedUser) {
+      return toast.error("Usuário não encontrado!");
+    }
+
+    if (findedUser.password !== password) {
+      return toast.error("Senha incorreta!");
+    }
+
+    localStorage.setItem("user", JSON.stringify(findedUser));
+    setUser(findedUser);
+    navigate(`/${mainPath}/timeline`);
   }
 
   return (
     <div className="container-login">
-      <Toaster richColors closeButton theme='dark' position="top-right" />
+      <Toaster richColors closeButton theme="dark" position="top-right" />
       <div className="form-container">
         <header>
           <h1>Mosegook</h1>
@@ -55,7 +71,9 @@ const Login = () => {
           </div>
           <div className="form-button-container">
             <button onClick={handleLogin}>Entrar</button>
-            <Link to={`/${mainPath}/signup`}>Não tem uma conta? Cadastre-se</Link>
+            <Link to={`/${mainPath}/signup`}>
+              Não tem uma conta? Cadastre-se
+            </Link>
           </div>
         </div>
       </div>

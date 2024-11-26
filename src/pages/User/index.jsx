@@ -1,14 +1,21 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
+import { useParams } from "react-router-dom";
 
-import Loading from "../../Components/Loading";
-import Avaliation from "../../Components/Avaliation";
-import Coment from "../../Components/Coment";
+import Loading from "../../components/Loading";
+import Avaliation from "../../components/Avaliation";
+import Coment from "../../components/Coment";
 
-import api from "../../services/api";
+import { Context } from "../../context";
+
 import "./user.css";
 
-const User = (props) => {
+const User = () => {
+  const { user: userParam } = useParams();
+  const { user: userContext } = useContext(Context);
+
   const [loading, setLoading] = useState(true);
+  const [onEdit, setOnEdit] = useState(false);
+
   const [user, setUser] = useState();
   const [userNotExists, setUserNotExists] = useState();
   const [avaliations, setAvaliations] = useState([]);
@@ -16,58 +23,47 @@ const User = (props) => {
   const [following, setFollowing] = useState(false);
   const [followMe, setFollowMe] = useState(false);
   const [amountFollowers, setAmountFollowers] = useState(0);
-  const [onEdit, setOnEdit] = useState(false);
 
   const [image, setImage] = useState({});
   const [name, setName] = useState("");
   const [biography, setBiography] = useState("");
 
-  const [viewModal, setViewModal] = useState(false);
-  const [percentualUpload, setPercentualUpload] = useState(0);
-
   const inputImage = useRef(null);
 
   useEffect(() => {
-    
-  }, [props]);
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const findedUser = users.find((u) => u.user === userParam);
 
-  useEffect(() => {
-    
-  }, [user]);
+    if (findedUser) {
+      setUser(findedUser);
+      setUserNotExists(false);
+      setAmountFollowers(findedUser.followers_count);
+      setName(findedUser.name);
+      setBiography(findedUser.biography);
+      setAvaliations(findedUser.avaliations);
+      setComents(findedUser.coments);
+      setLoading(false);
+    } else {
+      setUserNotExists(true);
+      setLoading(false);
+    }
+  }, [userParam]);
 
   function handleFollow() {
-    const follow = { user_id: userContext.id, following_user_id: user.user.id };
+    const follow = { user_id: userContext.id, following_user_id: user.id };
 
     if (following) {
-      
+      setFollowing(false);
+      console.log("remover follow");
     } else {
-      api
-       
+      setFollowing(true);
+      console.log("criar follow");
     }
   }
 
   function handleEdit() {
-    const formdata = new FormData();
-    formdata.append("name", name);
-    formdata.append("biography", biography);
-    formdata.append("image", image);
-
-    api
-      .put(`/users/${userContext.id}`, formdata, {
-        onUploadProgress: (e) => handleProgress(e),
-      })
-      .then((res) => {
-        if (res.data.message) {
-        } else {
-          setOnEdit(false);
-        }
-      })
-      .catch((error) => console.error(error.message));
-  }
-
-  function handleProgress(e) {
-    setViewModal(true);
-    setPercentualUpload(parseInt(Math.round(e.loaded * 100) / e.total));
+    const newUser = { name, biography, image };
+    console.log({ newUser });
   }
 
   return (
@@ -79,49 +75,17 @@ const User = (props) => {
         </div>
       )}
       {loading && <Loading />}
-      {viewModal && (
-        <div className="modal">
-          <div className="modal-content upload">
-            {percentualUpload !== 100 ? (
-              <ion-icon className="rotate" name="hourglass-outline"></ion-icon>
-            ) : (
-              <ion-icon name="checkmark-circle-outline"></ion-icon>
-            )}
-            {percentualUpload !== 100 ? (
-              <h1>Enviando...</h1>
-            ) : (
-              <h1>Atualizado com sucesso!</h1>
-            )}
-            {percentualUpload !== 100 ? (
-              <div className="progress">
-                <div
-                  style={{ width: `${percentualUpload}%` }}
-                  className="progress-content"
-                ></div>
-              </div>
-            ) : (
-              <button
-                onClick={() => {
-                  setViewModal(false);
-                }}
-              >
-                Fechar
-              </button>
-            )}
-          </div>
-        </div>
-      )}
       <div className="profile-info-container">
         {user && (
           <div className="user-info-container">
             <div className="image-user-container">
               <img
                 src={
-                  image.name
+                  image?.name
                     ? URL.createObjectURL(image)
                     : `${user.user.url_image}?${Date.now()}`
                 }
-                alt={user.user.user}
+                alt={user.user}
               />
               {onEdit && (
                 <div className="button-container">
@@ -150,16 +114,16 @@ const User = (props) => {
                   placeholder="Seu nome"
                 />
               )}
-              <h1>@{user.user.user}</h1>
+              <h1>@{user.user}</h1>
               <div className="follow-container">
-                <p>{user.following_count.amount} Seguindo</p>
+                <p>{user.following_count} Seguindo</p>
                 <p>{amountFollowers} Seguidores</p>
-                {userContext.user === user.user.user && (
+                {userContext.user === user.user && (
                   <button onClick={() => setOnEdit(!onEdit)}>
                     Editar Perfil
                   </button>
                 )}
-                {userContext.user !== user.user.user && (
+                {userContext.user !== user.user && (
                   <button
                     className={following && "selected"}
                     onClick={() => handleFollow()}
@@ -211,18 +175,12 @@ const User = (props) => {
       </div>
       <div className="profile-interations-container">
         <div className="avaliations-column">
-          {user && avaliations.length > 0 ? (
+          {user && avaliations?.length > 0 ? (
             avaliations.map((avaliation) => (
               <Avaliation
                 key={avaliation.id}
                 avaliation={avaliation}
-                handleDelete={() =>
-                  handleDeleteAvaliation(
-                    avaliation,
-                    avaliations,
-                    setAvaliations
-                  )
-                }
+                handleDelete={() => {}}
               />
             ))
           ) : (
@@ -233,15 +191,9 @@ const User = (props) => {
           )}
         </div>
         <div className="coment-column">
-          {user && coments.length > 0 ? (
+          {user && coments?.length > 0 ? (
             coments.map((coment) => (
-              <Coment
-                key={coment.id}
-                coment={coment}
-                handleDelete={() =>
-                  handleDeleteComent(coment, coments, setComents)
-                }
-              />
+              <Coment key={coment.id} coment={coment} handleDelete={() => {}} />
             ))
           ) : (
             <div className="nothing-container">

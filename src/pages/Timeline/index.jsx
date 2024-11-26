@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 
-import Avaliation from "../../Components/Avaliation";
-import Coment from "../../Components/Coment";
+import Avaliation from "../../components/Avaliation";
+import Coment from "../../components/Coment";
 
+import { Context } from "../../context";
 import api from "../../services/api";
+
 import "./timeline.css";
 
 const Timeline = () => {
+  const { user, setUser } = useContext(Context);
+
   const [avaliations, setAvaliations] = useState([]);
   const [coments, setComents] = useState([]);
   const [viewInputSearchMediaMention, setViewInputSearchMediaMention] =
@@ -17,6 +22,14 @@ const Timeline = () => {
   const [contentAvaliation, setContentAvaliation] = useState("");
   const [stars, setStars] = useState(0);
   const [mentionedMedia, setMentionedMedia] = useState(null);
+
+  useEffect(() => {
+    const avaliations = JSON.parse(localStorage.getItem("avaliations")) || [];
+    setAvaliations(avaliations);
+
+    const comments = JSON.parse(localStorage.getItem("comments")) || [];
+    setComents(comments);
+  }, []);
 
   function handleSearchMediasMention(e) {
     setSearchMediaMention(e.target.value);
@@ -33,17 +46,37 @@ const Timeline = () => {
 
   function handleAvaliate() {
     const avaliation = {
+      id: uuid(),
+      user_name: user.name,
+      user_user: user.user,
       media_id: mentionedMedia.id,
+      media_name: mentionedMedia.title,
+      media_poster_path: mentionedMedia.poster_path,
       content: contentAvaliation,
       stars,
-    };
-
-    const updatedAvaliation = {
-      ...avaliation,
       amountComents: 0,
       amountLikes: 0,
+      created_at: new Date().toLocaleString(),
     };
-    setAvaliations([updatedAvaliation, ...avaliations]);
+
+    const newUser = {
+      ...user,
+      avaliations: [avaliation, ...avaliations],
+    };
+
+    localStorage.setItem("user", JSON.stringify(newUser));
+    setUser(newUser);
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const newUsers = users.filter((u) => u.user !== user.user);
+    localStorage.setItem("users", JSON.stringify([newUser, ...newUsers]));
+
+    localStorage.setItem(
+      "avaliations",
+      JSON.stringify([avaliation, ...avaliations])
+    );
+
+    setAvaliations([avaliation, ...avaliations]);
     setContentAvaliation("");
     setMentionedMedia(null);
     setStars(0);
@@ -70,7 +103,7 @@ const Timeline = () => {
                 <div className="media-mentioned-container">
                   <div className="media-mentioned">
                     <div
-                      style={{ backgroundColor: 'blueviolet' }}
+                      style={{ backgroundColor: "blueviolet" }}
                       className="color-media-mentioned"
                     >
                       <ion-icon name="film-outline"></ion-icon>
@@ -184,13 +217,9 @@ const Timeline = () => {
                     <Avaliation
                       key={avaliation.id}
                       avaliation={avaliation}
-                      handleDelete={() =>
-                        handleDeleteAvaliation(
-                          avaliation,
-                          avaliations,
-                          setAvaliations
-                        )
-                      }
+                      handleDelete={() => {
+                        console.log("delete");
+                      }}
                     />
                   ))
                 ) : (
@@ -209,9 +238,9 @@ const Timeline = () => {
                     <Coment
                       key={coment.id}
                       coment={coment}
-                      handleDelete={() =>
-                        handleDeleteComent(coment, coments, setComents)
-                      }
+                      handleDelete={() => {
+                        console.log("delete");
+                      }}
                     />
                   ))
                 ) : (

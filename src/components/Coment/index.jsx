@@ -1,21 +1,38 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import { Context } from "../../context";
+
 import "./coment.css";
 
 const Coment = ({ coment, handleDelete }) => {
+  const mainPath = "projeto-bloco-frontend";
+
   const { user } = useContext(Context);
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState([]);
 
   useEffect(() => {
-    // implementar logica para validar se ja foi curtido
-  }, [coment, user.id]);
+    const likes = JSON.parse(localStorage.getItem("mylikes")) || [];
+    const existentLike = likes.find((l) => l.coment_id === coment.id);
+
+    if (existentLike) {
+      setLiked(true);
+      setLike(existentLike);
+    }
+  }, [coment]);
 
   function handleLike() {
+    const likes = JSON.parse(localStorage.getItem("mylikes")) || [];
+
     if (liked) {
-      // implementar like
+      const newLikes = likes.filter((l) => l.coment_id !== coment.id);
+      localStorage.setItem("mylikes", JSON.stringify(newLikes));
+      setLiked(false);
     } else {
-      // implementar deslike
+      const newLike = { user_id: user.id, coment_id: coment.id };
+      localStorage.setItem("mylikes", JSON.stringify([...likes, newLike]));
+      setLiked(true);
     }
   }
 
@@ -23,29 +40,24 @@ const Coment = ({ coment, handleDelete }) => {
     <div key={coment.id} className="coment">
       <div className="header-coment">
         <div className="info-user">
-          <ion-icon
-            style={{ color: coment.category_color }}
-            name="chatbox"
-          ></ion-icon>
+          <ion-icon style={{ color: "blueviolet" }} name="chatbox"></ion-icon>
           <div className="user-info">
             <h3>{coment.user_name}</h3>
             <p>@{coment.user_user}</p>
           </div>
         </div>
         <div className="info-post">
-          <p style={{ backgroundColor: coment.category_color }}>
-            {coment.created_at}
-          </p>
+          <p style={{ backgroundColor: "blueviolet" }}>{coment.created_at}</p>
         </div>
       </div>
       <div className="content-coment">{coment.content}</div>
       <div className="footer-coment">
         <div className="info-media">
           <div
-            style={{ backgroundColor: coment.category_color }}
+            style={{ backgroundColor: "blueviolet" }}
             className="color-coment"
           >
-            <ion-icon name={coment.category_icon}></ion-icon>
+            <ion-icon name="film-outline"></ion-icon>
           </div>
           <div className="info-footer">
             <h3>Sobre</h3>
@@ -58,7 +70,7 @@ const Coment = ({ coment, handleDelete }) => {
         </div>
         <div className="info-coment">
           <div
-            style={{ backgroundColor: coment.category_color }}
+            style={{ backgroundColor: "blueviolet" }}
             className="amount-likes"
           >
             <ion-icon name="heart"></ion-icon>
@@ -79,11 +91,11 @@ const Coment = ({ coment, handleDelete }) => {
           </button>
         )}
         {user.id !== coment.user_id && (
-          <Link to={`/user/${coment.user_user}`}>
+          <Link to={`/${mainPath}/user/${coment.user_user}`}>
             <ion-icon name="person-outline"></ion-icon>
           </Link>
         )}
-        <Link to={`/avaliation/${coment.avaliation_id}`}>
+        <Link to={`/${mainPath}/avaliation/${coment.avaliation_id}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="51"

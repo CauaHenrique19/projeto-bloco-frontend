@@ -19,7 +19,7 @@ const DetailedMedia = () => {
         setActors(actors);
       })
       .catch((error) => console.error(error.message));
-  }, []);
+  }, [id]);
 
   return (
     <div>

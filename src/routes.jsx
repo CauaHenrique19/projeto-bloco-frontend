@@ -7,6 +7,7 @@ import Signup from "./pages/SignUp";
 import DetailedMedia from "./pages/DetailedMedia";
 import Timeline from "./pages/Timeline";
 import User from "./pages/User";
+import DetailedAvaliation from "./pages/DetailedAvaliation";
 
 const mainPath = "projeto-bloco-frontend";
 
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: `${mainPath}/user/:user`,
     element: <User />,
+  },
+  {
+    path: `${mainPath}/avaliation/:id`,
+    element: <DetailedAvaliation />,
   },
 ]);
 
