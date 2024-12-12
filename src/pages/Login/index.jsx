@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 import { Context } from "../../context";
+import { mainPath } from "../../routes";
 
 import "./login.css";
 
 const Login = () => {
-  const mainPath = "projeto-bloco-frontend";
   const navigate = useNavigate();
 
   const { setUser } = useContext(Context);
@@ -39,7 +39,6 @@ const Login = () => {
 
   return (
     <div className="container-login">
-      <Toaster richColors closeButton theme="dark" position="top-right" />
       <div className="form-container">
         <header>
           <h1>Mosegook</h1>

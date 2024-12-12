@@ -166,6 +166,7 @@
     width: 230px;
     height: 230px;
     border-radius: 100%;
+    object-fit: cover;
 }
 .profile-info-container .user-info-container input{
     width: 100%;

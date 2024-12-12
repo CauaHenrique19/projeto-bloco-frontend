@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
+import { mainPath } from "../../routes";
+
 import "./style.css";
 
 const Media = ({ media, redirect, selectMedia }) => {
-  const mainPath = "projeto-bloco-frontend";
-
   return (
     <Link
       to={redirect && `/${mainPath}/media/${media.id}`}

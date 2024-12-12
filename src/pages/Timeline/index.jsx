@@ -1,16 +1,21 @@
 import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
+import { toast } from "sonner";
+
+import api from "../../services/api";
 
 import Avaliation from "../../components/Avaliation";
 import Coment from "../../components/Coment";
 
 import { Context } from "../../context";
-import api from "../../services/api";
+import { mainPath } from "../../routes";
 
 import "./timeline.css";
 
 const Timeline = () => {
   const { user, setUser } = useContext(Context);
+  const navigate = useNavigate();
 
   const [avaliations, setAvaliations] = useState([]);
   const [coments, setComents] = useState([]);
@@ -45,6 +50,9 @@ const Timeline = () => {
   }
 
   function handleAvaliate() {
+    if (!contentAvaliation)
+      return toast.error("Informe o conteúdo da avaliação!");
+
     const avaliation = {
       id: uuid(),
       user_name: user.name,
@@ -59,9 +67,12 @@ const Timeline = () => {
       created_at: new Date().toLocaleString(),
     };
 
+    const userAvaliations = avaliations.filter(
+      (avaliation) => avaliation.user_user === user.user
+    );
     const newUser = {
       ...user,
-      avaliations: [avaliation, ...avaliations],
+      avaliations: [avaliation, ...userAvaliations],
     };
 
     localStorage.setItem("user", JSON.stringify(newUser));
@@ -84,9 +95,38 @@ const Timeline = () => {
     setViewInputSearchMediaMention(false);
   }
 
+  function handleLogout(e) {
+    e.preventDefault();
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate(`/${mainPath}/`);
+  }
+
   return (
     <div className="timeline-container">
       <div className="timeline-content-container">
+        <div className="menu-timeline-container">
+          <div className="header-menu">
+            <h1>Mosegook</h1>
+          </div>
+          <ul className="content-menu">
+            <li>
+              <Link to={`/${mainPath}/catalog`}>
+                <ion-icon name="apps-outline"></ion-icon>Catálogo
+              </Link>
+            </li>
+            <li>
+              <Link to={`/${mainPath}/user/${user.user}`}>
+                <ion-icon name="person-outline"></ion-icon>Perfil
+              </Link>
+            </li>
+            <li>
+              <Link to={`/${mainPath}/`} onClick={handleLogout}>
+                <ion-icon name="log-out-outline"></ion-icon>Sair
+              </Link>
+            </li>
+          </ul>
+        </div>
         <div className="main-timeline">
           <div className="columns-container">
             <div className="container-new-avaliation">
@@ -214,13 +254,7 @@ const Timeline = () => {
               <div className="column-avaliations">
                 {avaliations.length > 0 ? (
                   avaliations.map((avaliation) => (
-                    <Avaliation
-                      key={avaliation.id}
-                      avaliation={avaliation}
-                      handleDelete={() => {
-                        console.log("delete");
-                      }}
-                    />
+                    <Avaliation key={avaliation.id} avaliation={avaliation} />
                   ))
                 ) : (
                   <div className="nothing-container">
@@ -235,13 +269,7 @@ const Timeline = () => {
               <div className="column-coments">
                 {coments.length > 0 ? (
                   coments.map((coment) => (
-                    <Coment
-                      key={coment.id}
-                      coment={coment}
-                      handleDelete={() => {
-                        console.log("delete");
-                      }}
-                    />
+                    <Coment key={coment.id} coment={coment} />
                   ))
                 ) : (
                   <div className="nothing-container">

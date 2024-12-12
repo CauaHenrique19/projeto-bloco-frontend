@@ -8,8 +8,9 @@ import DetailedMedia from "./pages/DetailedMedia";
 import Timeline from "./pages/Timeline";
 import User from "./pages/User";
 import DetailedAvaliation from "./pages/DetailedAvaliation";
+import PrivateRoute from "./components/PrivateRoute";
 
-const mainPath = "projeto-bloco-frontend";
+export const mainPath = "projeto-bloco-frontend";
 
 const router = createBrowserRouter([
   {
@@ -34,15 +35,15 @@ const router = createBrowserRouter([
   },
   {
     path: `${mainPath}/timeline`,
-    element: <Timeline />,
+    element: <PrivateRoute Component={Timeline} />,
   },
   {
     path: `${mainPath}/user/:user`,
-    element: <User />,
+    element: <PrivateRoute Component={User} />,
   },
   {
     path: `${mainPath}/avaliation/:id`,
-    element: <DetailedAvaliation />,
+    element: <PrivateRoute Component={DetailedAvaliation} />,
   },
 ]);
 

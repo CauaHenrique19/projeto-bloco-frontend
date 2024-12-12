@@ -11,17 +11,21 @@ const Catalog = () => {
   const [medias, setMedias] = useState([]);
   const [searchString, setSearchString] = useState();
   const [filteredMedias, setFilteredMedias] = useState([]);
+  const [actualPage, setActualPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     api
-      .get("/discover/movie")
+      .get("/discover/movie", { params: { page: actualPage } })
       .then((res) => {
-        setMedias(res.data.results);
-        setFilteredMedias(res.data.results);
+        const newMedias = [...medias, ...res.data.results];
+        setMedias(newMedias);
+        setFilteredMedias(newMedias);
+        setTotalPages(res.data.total_pages);
         setLoading(false);
       })
       .catch((error) => console.error(error.message));
-  }, []);
+  }, [actualPage]);
 
   function handleSearch(search) {
     setSearchString(search);
@@ -68,6 +72,13 @@ const Catalog = () => {
               />
             ))}
         </div>
+        {actualPage < totalPages && !searchString && (
+          <div className="load-more-button">
+            <button onClick={() => setActualPage(actualPage + 1)}>
+              Carregar Mais
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

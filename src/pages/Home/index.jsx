@@ -1,102 +1,102 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
-import api from "../../services/api";
+import { Context } from "../../context";
+import { mainPath } from "../../routes";
+
+import UserImage from "../../assets/user-image.png";
 
 import "./home.css";
 
 const Home = () => {
-  const mainPath = "projeto-bloco-frontend";
-
   const [opinions] = useState({
     first_row: [
       {
         id: 1,
-        content: "adasdasda",
+        content:
+          "Adorei a ideia de compartilhar minhas opiniões sobre filmes com outros cinéfilos. A interface é intuitiva e fácil de usar.",
         user_id: 2,
-        created_at: new Date(),
+        created_at: new Date("2024-12-11T10:30:00"),
         url_image: "",
         name: "Lucas",
         user: "@lucas",
       },
       {
         id: 2,
-        content: "adasdasda",
-        user_id: 2,
-        created_at: new Date(),
-        url_image: "",
-        name: "Lucas",
-        user: "@lucas",
+        content:
+          "A plataforma tem muito potencial, mas às vezes os servidores ficam lentos. Espero que melhorem isso!",
+        user_id: 3,
+        created_at: new Date("2024-12-11T12:45:00"),
+        url_image: "https://example.com/avatar.jpg",
+        name: "Mariana",
+        user: "@mariana_01",
       },
       {
         id: 3,
-        content: "adasdasda",
-        user_id: 2,
-        created_at: new Date(),
+        content:
+          "Achei incrível a funcionalidade de criar listas personalizadas de filmes. Já recomendei para vários amigos!",
+        user_id: 4,
+        created_at: new Date("2024-12-10T19:20:00"),
         url_image: "",
-        name: "Lucas",
-        user: "@lucas",
+        name: "Carlos",
+        user: "@carlitos",
       },
       {
         id: 4,
-        content: "adasdasda",
-        user_id: 2,
-        created_at: new Date(),
-        url_image: "",
-        name: "Lucas",
-        user: "@lucas",
+        content:
+          "Seria ótimo ter mais filtros para encontrar pessoas com gostos semelhantes. De resto, estou adorando usar a plataforma.",
+        user_id: 5,
+        created_at: new Date("2024-12-11T15:00:00"),
+        url_image: "https://example.com/soul.jpg",
+        name: "Beatriz",
+        user: "@bia",
       },
     ],
     second_row: [
       {
-        id: 1,
-        content: "adasdasda",
-        user_id: 2,
-        created_at: new Date(),
+        id: 5,
+        content:
+          "A comunidade aqui é incrível! Estou sempre descobrindo novos filmes e séries graças às indicações.",
+        user_id: 6,
+        created_at: new Date("2024-12-11T22:30:00"),
         url_image: "",
-        name: "Lucas",
-        user: "@lucas",
+        name: "João",
+        user: "@joaozinho",
       },
       {
-        id: 2,
-        content: "adasdasda",
-        user_id: 2,
-        created_at: new Date(),
-        url_image: "",
-        name: "Lucas",
-        user: "@lucas",
+        id: 6,
+        content:
+          "A plataforma é boa, mas falta um sistema de notificação mais eficiente. Às vezes perco interações importantes.",
+        user_id: 7,
+        created_at: new Date("2024-12-10T09:15:00"),
+        url_image: "https://example.com/corra.jpg",
+        name: "Fernanda",
+        user: "@nandinha",
       },
       {
-        id: 3,
-        content: "adasdasda",
-        user_id: 2,
-        created_at: new Date(),
+        id: 7,
+        content:
+          "A possibilidade de comentar e curtir avaliações me deixou viciado! É ótimo ver o que as pessoas pensam.",
+        user_id: 8,
+        created_at: new Date("2024-12-12T08:00:00"),
         url_image: "",
-        name: "Lucas",
-        user: "@lucas",
+        name: "Pedro",
+        user: "@pedro_gamer",
       },
       {
-        id: 4,
-        content: "adasdasda",
-        user_id: 2,
-        created_at: new Date(),
-        url_image: "",
-        name: "Lucas",
-        user: "@lucas",
+        id: 8,
+        content:
+          "O design do site é muito bonito e funcional. Só gostaria de mais opções para personalizar meu perfil.",
+        user_id: 9,
+        created_at: new Date("2024-12-12T13:40:00"),
+        url_image: "https://example.com/duna.jpg",
+        name: "Ana",
+        user: "@anafilmes",
       },
     ],
   });
 
-  useEffect(() => {
-    const imageUrl = "https://image.tmdb.org/t/p/original/${image}";
-
-    api
-      .get("/movie/top_rated?language=pt-BR")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.error(err.message));
-  }, []);
+  const { user } = useContext(Context);
 
   return (
     <>
@@ -107,20 +107,20 @@ const Home = () => {
           </div>
           <div className="right-wrapper">
             <Link to={`/${mainPath}/catalog`}>Catálogo</Link>
-            <Link to={`/${mainPath}/login`}>Entrar</Link>
-            <Link to={`/${mainPath}/timeline`}>Timeline</Link>
+            {!user && <Link to={`/${mainPath}/login`}>Entrar</Link>}
+            {user && <Link to={`/${mainPath}/timeline`}>Timeline</Link>}
           </div>
         </header>
         <main className="main">
           <div className="info-container">
             <h1>Compartilhe suas opiniões com amigos.</h1>
             <p>
-              Aqui você pode compartilhar suas opiniões sobre filmes, séries,
-              livros e jogos com qualquer pessoa ou amigos. Temos vários títulos
-              famosos mas se não tiver, você poderá indicar um título da sua
-              preferência.
+              Aqui você pode compartilhar suas opiniões sobre filmes com
+              qualquer pessoa ou amigos. Temos vários títulos famosos.
             </p>
-            <Link to="/signup">Começar a avaliar</Link>
+            {!user && (
+              <Link to={`/${mainPath}/signup/`}>Começar a avaliar</Link>
+            )}
           </div>
           <div
             className="button-next-page"
@@ -143,8 +143,7 @@ const Home = () => {
             <h1>Motivos para você nos escolher</h1>
             <p>
               Lendo nossas melhores qualidades você irá descobrir que nossa
-              plataforma é um ótimo local de discussão sobre filmes, jogos,
-              séries e livros.
+              plataforma é um ótimo local de discussão sobre filmes.
             </p>
           </div>
           <div
@@ -182,8 +181,7 @@ const Home = () => {
             </div>
             <h2>Milhares de Conteúdos</h2>
             <p>
-              Nosso catálogo conta com milhares de filmes, livros, séries e
-              jogos para você avaliar.
+              Nosso catálogo conta com milhares de filmes para você avaliar.
             </p>
           </div>
           <div className="advantage">
@@ -198,74 +196,8 @@ const Home = () => {
               para que nenhum usuário seja ofendido e a manutenção da ordem.
             </p>
           </div>
-          <div className="advantage">
-            <div className="circle-animation blue"></div>
-            <div className="circle-animation minor blue"></div>
-            <div className="circle-icon">
-              <ion-icon name="bar-chart-outline"></ion-icon>
-            </div>
-            <h2>Sistema de Ranking</h2>
-            <p>
-              Nossa plataforma possui um sistema de ranking que motiva nossos
-              usuários a se manterem ativos, ganhe pontos avaliando e
-              comentando.
-            </p>
-          </div>
         </div>
       </div>
-      {/*
-      <div className="most-rated">
-        {loading && <Loading />}
-        <div className="header-most-rated">
-          <h1>Os mais bem avaliados pela comunidade</h1>
-          <div className="pages-visualizer">
-            {numberVisualizers.map((number) => (
-              <div
-                key={number}
-                className={number === count - 1 ? "page in-that" : "page"}
-                onClick={() => {
-                  count = number;
-                  setCount(count);
-                  next();
-                }}
-              ></div>
-            ))}
-          </div>
-        </div>
-        <div className="most-rateds-content">
-          <button className="previous-button-slider" onClick={previous}>
-            <ion-icon name="chevron-back-outline"></ion-icon>
-          </button>
-          <button className="next-button-slider" onClick={next}>
-            <ion-icon name="chevron-forward-outline"></ion-icon>
-          </button>
-          <div className="media-slider">
-            {medias &&
-              medias.map((media) => (
-                <Media
-                  media={media}
-                  redirect
-                  selectMedia={() => {}}
-                  key={media.url_poster}
-                />
-              ))}
-          </div>
-        </div>
-        <div
-          className="button-next-page"
-          onClick={() =>
-            window.scrollTo({
-              top: window.innerHeight * 2.7,
-              behavior: "smooth",
-            })
-          }
-        >
-          <ion-icon name="chevron-down-outline"></ion-icon>
-          <ion-icon name="chevron-down-outline"></ion-icon>
-          <ion-icon name="chevron-down-outline"></ion-icon>
-        </div>
-      </div>
-      */}
       <div className="we-peoples-about-us">
         <h1>O que as pessoas acham da gente</h1>
         <div className="row">
@@ -285,7 +217,11 @@ const Home = () => {
                   <p>{opinion.content}</p>
                 </div>
                 <div className="info-people">
-                  <img className="people-img" src={opinion.url_image} alt="" />
+                  <img
+                    className="people-img"
+                    src={UserImage}
+                    alt={opinion.user}
+                  />
                   <div>
                     <p>{opinion.name}</p>
                     <p>{opinion.user}</p>
@@ -311,7 +247,11 @@ const Home = () => {
                   <p>{opinion.content}</p>
                 </div>
                 <div className="info-people">
-                  <img className="people-img" src={opinion.url_image} alt="" />
+                  <img
+                    className="people-img"
+                    src={UserImage}
+                    alt={opinion.user}
+                  />
                   <div>
                     <p>{opinion.name}</p>
                     <p>{opinion.user}</p>

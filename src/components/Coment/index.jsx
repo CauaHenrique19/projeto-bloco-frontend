@@ -2,19 +2,22 @@ import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Context } from "../../context";
+import { mainPath } from "../../routes";
 
 import "./coment.css";
 
-const Coment = ({ coment, handleDelete }) => {
-  const mainPath = "projeto-bloco-frontend";
-
+const Coment = ({ coment }) => {
   const { user } = useContext(Context);
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState([]);
 
+  const [amountLikes, setAmountLikes] = useState(0);
+
   useEffect(() => {
     const likes = JSON.parse(localStorage.getItem("mylikes")) || [];
     const existentLike = likes.find((l) => l.coment_id === coment.id);
+
+    setAmountLikes(likes.filter((like) => like.coment_id === coment.id).length);
 
     if (existentLike) {
       setLiked(true);
@@ -29,10 +32,12 @@ const Coment = ({ coment, handleDelete }) => {
       const newLikes = likes.filter((l) => l.coment_id !== coment.id);
       localStorage.setItem("mylikes", JSON.stringify(newLikes));
       setLiked(false);
+      setAmountLikes(amountLikes - 1);
     } else {
       const newLike = { user_id: user.id, coment_id: coment.id };
       localStorage.setItem("mylikes", JSON.stringify([...likes, newLike]));
       setLiked(true);
+      setAmountLikes(amountLikes + 1);
     }
   }
 
@@ -74,7 +79,7 @@ const Coment = ({ coment, handleDelete }) => {
             className="amount-likes"
           >
             <ion-icon name="heart"></ion-icon>
-            <p>{coment.amountLikes}</p>
+            <p>{amountLikes}</p>
           </div>
         </div>
       </div>
@@ -85,11 +90,6 @@ const Coment = ({ coment, handleDelete }) => {
             name={liked ? "heart" : "heart-outline"}
           ></ion-icon>
         </button>
-        {user.id === coment.user_id && (
-          <button onClick={() => handleDelete(coment)}>
-            <ion-icon name="trash-outline"></ion-icon>
-          </button>
-        )}
         {user.id !== coment.user_id && (
           <Link to={`/${mainPath}/user/${coment.user_user}`}>
             <ion-icon name="person-outline"></ion-icon>

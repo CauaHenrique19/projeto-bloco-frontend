@@ -6,6 +6,8 @@ import Avaliation from "../../components/Avaliation";
 import Coment from "../../components/Coment";
 
 import { Context } from "../../context";
+import { toBase64 } from "../../utils";
+import DefaultUserImage from "../../assets/user-image.png";
 
 import "./user.css";
 
@@ -21,12 +23,13 @@ const User = () => {
   const [avaliations, setAvaliations] = useState([]);
   const [coments, setComents] = useState([]);
   const [following, setFollowing] = useState(false);
-  const [followMe, setFollowMe] = useState(false);
-  const [amountFollowers, setAmountFollowers] = useState(0);
 
-  const [image, setImage] = useState({});
+  const [image, setImage] = useState();
   const [name, setName] = useState("");
   const [biography, setBiography] = useState("");
+
+  const [amountFollowers, setAmountFollowers] = useState(0);
+  const [amountFollowing, setAmountFollowing] = useState(0);
 
   const inputImage = useRef(null);
 
@@ -37,12 +40,35 @@ const User = () => {
     if (findedUser) {
       setUser(findedUser);
       setUserNotExists(false);
-      setAmountFollowers(findedUser.followers_count);
       setName(findedUser.name);
       setBiography(findedUser.biography);
       setAvaliations(findedUser.avaliations);
       setComents(findedUser.coments);
+      setImage(findedUser.image);
       setLoading(false);
+
+      const comments = JSON.parse(localStorage.getItem("comments")) || [];
+      const commentsUser = comments.filter((c) => c.user_id === findedUser.id);
+
+      const follows = JSON.parse(localStorage.getItem("follows")) || [];
+      const follow = follows.find(
+        (f) =>
+          f.following_user_id === findedUser.id && f.user_id === userContext.id
+      );
+
+      setAmountFollowers(
+        follows.filter((follow) => follow.following_user_id === findedUser.id)
+          .length
+      );
+      setAmountFollowing(
+        follows.filter((follow) => follow.user_id === findedUser.id).length
+      );
+
+      if (follow) {
+        setFollowing(true);
+      }
+
+      setComents(commentsUser);
     } else {
       setUserNotExists(true);
       setLoading(false);
@@ -51,19 +77,49 @@ const User = () => {
 
   function handleFollow() {
     const follow = { user_id: userContext.id, following_user_id: user.id };
+    const follows = JSON.parse(localStorage.getItem("follows")) || [];
 
     if (following) {
+      const followsFiltered = follows.filter(
+        (follow) => follow.following_user_id !== user.id
+      );
+      localStorage.setItem("follows", JSON.stringify(followsFiltered));
+      setAmountFollowers(amountFollowers - 1);
       setFollowing(false);
-      console.log("remover follow");
     } else {
+      const newFollows = [...follows, follow];
+      localStorage.setItem("follows", JSON.stringify(newFollows));
+      setAmountFollowers(amountFollowers + 1);
       setFollowing(true);
-      console.log("criar follow");
     }
   }
 
-  function handleEdit() {
-    const newUser = { name, biography, image };
-    console.log({ newUser });
+  async function handleEdit() {
+    const helpUser = { ...user };
+    const imageString = image?.name ? await toBase64(image) : image;
+    const newUser = Object.assign(helpUser, {
+      name,
+      biography,
+      image: imageString,
+    });
+
+    localStorage.setItem("user", JSON.stringify(newUser));
+    setUser(newUser);
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const newUsers = users.filter((u) => u.user !== user.user);
+    localStorage.setItem("users", JSON.stringify([newUser, ...newUsers]));
+    setOnEdit(false);
+  }
+
+  function getImage() {
+    if (image?.name) {
+      return URL.createObjectURL(image);
+    } else if (image) {
+      return image;
+    } else {
+      return DefaultUserImage;
+    }
   }
 
   return (
@@ -79,14 +135,7 @@ const User = () => {
         {user && (
           <div className="user-info-container">
             <div className="image-user-container">
-              <img
-                src={
-                  image?.name
-                    ? URL.createObjectURL(image)
-                    : `${user.user.url_image}?${Date.now()}`
-                }
-                alt={user.user}
-              />
+              <img src={getImage()} alt={user.user} />
               {onEdit && (
                 <div className="button-container">
                   <button
@@ -100,12 +149,6 @@ const User = () => {
               )}
             </div>
             <div className="user-info">
-              {!onEdit && (
-                <div className="name-container">
-                  <h1>{name}</h1>
-                  {followMe && <div className="follow-tag">Segue você</div>}
-                </div>
-              )}
               {onEdit && (
                 <input
                   value={name}
@@ -116,7 +159,7 @@ const User = () => {
               )}
               <h1>@{user.user}</h1>
               <div className="follow-container">
-                <p>{user.following_count} Seguindo</p>
+                <p>{amountFollowing} Seguindo</p>
                 <p>{amountFollowers} Seguidores</p>
                 {userContext.user === user.user && (
                   <button onClick={() => setOnEdit(!onEdit)}>
@@ -125,7 +168,7 @@ const User = () => {
                 )}
                 {userContext.user !== user.user && (
                   <button
-                    className={following && "selected"}
+                    className={following ? "selected" : ""}
                     onClick={() => handleFollow()}
                   >
                     {following ? "Deixar de seguir" : "Seguir"}
@@ -155,7 +198,7 @@ const User = () => {
                     className="cancel-edit"
                     onClick={() => {
                       setOnEdit(false);
-                      setImage(user.user.url_image);
+                      setImage(user.image);
                       inputImage.current.value = "";
                     }}
                   >
@@ -177,11 +220,7 @@ const User = () => {
         <div className="avaliations-column">
           {user && avaliations?.length > 0 ? (
             avaliations.map((avaliation) => (
-              <Avaliation
-                key={avaliation.id}
-                avaliation={avaliation}
-                handleDelete={() => {}}
-              />
+              <Avaliation key={avaliation.id} avaliation={avaliation} />
             ))
           ) : (
             <div className="nothing-container">
@@ -192,9 +231,7 @@ const User = () => {
         </div>
         <div className="coment-column">
           {user && coments?.length > 0 ? (
-            coments.map((coment) => (
-              <Coment key={coment.id} coment={coment} handleDelete={() => {}} />
-            ))
+            coments.map((coment) => <Coment key={coment.id} coment={coment} />)
           ) : (
             <div className="nothing-container">
               <ion-icon name="alert-circle"></ion-icon>

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Context } from "../../context";
 import { v4 as uuid } from "uuid";
 
+import { mainPath } from "../../routes";
 import Media from "../../components/Media";
 import Loading from "../../components/Loading";
 import Coment from "../../components/Coment";
@@ -10,8 +11,6 @@ import Coment from "../../components/Coment";
 import "./detailedavaliation.css";
 
 const DetailedAvaliation = () => {
-  const mainPath = "projeto-bloco-frontend";
-
   const { user } = useContext(Context);
   const { id } = useParams();
 
@@ -22,9 +21,20 @@ const DetailedAvaliation = () => {
   const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
 
+  const [amountLikes, setAmountLikes] = useState(0);
+  const [amountComents, setAmountComents] = useState(0);
+
   useEffect(() => {
     const likes = JSON.parse(localStorage.getItem("mylikes")) || [];
     const existentLike = likes.find((l) => l.avaliation_id === id);
+
+    setAmountLikes(likes.filter((like) => like.avaliation_id === id).length);
+
+    const comments = JSON.parse(localStorage.getItem("comments")) || [];
+
+    setAmountComents(
+      comments.filter((comment) => comment.avaliation_id === id).length
+    );
 
     if (existentLike) {
       setLiked(true);
@@ -41,7 +51,11 @@ const DetailedAvaliation = () => {
       setLoading(false);
 
       const comments = JSON.parse(localStorage.getItem("comments")) || [];
-      setComents(comments);
+      const commentsAvaliation = comments.filter(
+        (coment) => coment.avaliation_id === id
+      );
+
+      setComents(commentsAvaliation);
     }
   }, [id]);
 
@@ -52,10 +66,12 @@ const DetailedAvaliation = () => {
       const newLikes = likes.filter((l) => l.avaliation_id !== id);
       localStorage.setItem("mylikes", JSON.stringify(newLikes));
       setLiked(false);
+      setAmountLikes(amountLikes - 1);
     } else {
       const newLike = { user_id: user.id, avaliation_id: id };
       localStorage.setItem("mylikes", JSON.stringify([...likes, newLike]));
       setLiked(true);
+      setAmountLikes(amountLikes + 1);
     }
   }
 
@@ -78,8 +94,9 @@ const DetailedAvaliation = () => {
       JSON.stringify([coment, ...existentComments])
     );
 
-    setComents([coment, ...existentComments]);
+    setComents([coment, ...coments]);
     setContentComent("");
+    setAmountComents(amountComents + 1);
   }
 
   return (
@@ -144,7 +161,7 @@ const DetailedAvaliation = () => {
                   className="amount-coments"
                 >
                   <ion-icon name="chatbubble"></ion-icon>
-                  <p>{avaliationDetailed.amountComents}</p>
+                  <p>{amountComents}</p>
                 </div>
                 <div
                   style={{
@@ -153,7 +170,7 @@ const DetailedAvaliation = () => {
                   className="amount-likes"
                 >
                   <ion-icon name="heart"></ion-icon>
-                  <p>{avaliationDetailed.amountLikes}</p>
+                  <p>{amountLikes}</p>
                 </div>
               </div>
             </div>
@@ -199,11 +216,7 @@ const DetailedAvaliation = () => {
           <div className="coments">
             {coments.length > 0 &&
               coments.map((coment) => (
-                <Coment
-                  key={coment.id}
-                  coment={coment}
-                  handleDelete={() => {}}
-                />
+                <Coment key={coment.id} coment={coment} />
               ))}
           </div>
         </div>

@@ -1,5 +1,5 @@
 .catalog-container{
-    width: 100vw;
+    width: 100%;
     height: 100%;
     min-height: 100vh;
     display: flex;
@@ -77,4 +77,23 @@
     display: grid;
     grid-template-columns: repeat(5, 300px);
     grid-gap: 10px;
+}
+.catalog-container .load-more-button{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.catalog-container .load-more-button button{
+    padding: 10px;
+    background-color: blueviolet;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+.catalog-container .load-more-button button:hover{
+    background-color: rgb(106, 21, 185);
 }

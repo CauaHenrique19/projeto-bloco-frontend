@@ -2,19 +2,32 @@ import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Context } from "../../context";
+import { mainPath } from "../../routes";
 
 import "./avaliation.css";
 
-const Avaliation = ({ avaliation, handleDelete }) => {
-  const mainPath = "projeto-bloco-frontend";
-
+const Avaliation = ({ avaliation }) => {
   const { user } = useContext(Context);
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState([]);
 
+  const [amountLikes, setAmountLikes] = useState(0);
+  const [amountComents, setAmountComents] = useState(0);
+
   useEffect(() => {
     const likes = JSON.parse(localStorage.getItem("mylikes")) || [];
     const existentLike = likes.find((l) => l.avaliation_id === avaliation.id);
+
+    setAmountLikes(
+      likes.filter((like) => like.avaliation_id === avaliation.id).length
+    );
+
+    const comments = JSON.parse(localStorage.getItem("comments")) || [];
+
+    setAmountComents(
+      comments.filter((comment) => comment.avaliation_id === avaliation.id)
+        .length
+    );
 
     if (existentLike) {
       setLiked(true);
@@ -84,14 +97,14 @@ const Avaliation = ({ avaliation, handleDelete }) => {
             className="amount-avaliations"
           >
             <ion-icon name="chatbubble"></ion-icon>
-            <p>{avaliation.amountComents}</p>
+            <p>{amountComents}</p>
           </div>
           <div
             style={{ backgroundColor: "blueviolet" }}
             className="amount-likes"
           >
             <ion-icon name="heart"></ion-icon>
-            <p>{avaliation.amountLikes}</p>
+            <p>{amountLikes}</p>
           </div>
         </div>
       </div>
@@ -102,11 +115,6 @@ const Avaliation = ({ avaliation, handleDelete }) => {
             name={liked ? "heart" : "heart-outline"}
           ></ion-icon>
         </button>
-        {user.id === avaliation.user_id && (
-          <button onClick={handleDelete}>
-            <ion-icon name="trash-outline"></ion-icon>
-          </button>
-        )}
         {user.id !== avaliation.user_id && (
           <Link to={`/${mainPath}/user/${avaliation.user_user}`}>
             <ion-icon name="person-outline"></ion-icon>

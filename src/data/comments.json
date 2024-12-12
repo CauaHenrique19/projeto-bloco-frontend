@@ -1,0 +1,52 @@
+[
+  {
+    "avaliation_id": "7f6ad8fd-5899-4a55-84df-92ef9952de61",
+    "user_id": "ee419a1c-66ed-4334-8f38-9bde44ca5575",
+    "user_name": "teste1",
+    "user_user": "teste1",
+    "media_name": "Jurassic Park: O Parque dos Dinossauros",
+    "content": "Incrível! Um dos melhores filmes de aventura que já vi.",
+    "amountLikes": 0,
+    "created_at": "12/12/2024, 15:25:47"
+  },
+  {
+    "avaliation_id": "3a8bd1dc-8f9d-4b89-9eb4-43f6c89dbb75",
+    "user_id": "b671b5ec-27f5-4f5b-8c91-04144e9cfd32",
+    "user_name": "teste2",
+    "user_user": "teste2",
+    "media_name": "Jurassic Park: O Parque dos Dinossauros",
+    "content": "Os efeitos visuais ainda são impressionantes, mesmo tantos anos depois.",
+    "amountLikes": 0,
+    "created_at": "12/12/2024, 15:30:12"
+  },
+  {
+    "avaliation_id": "f8197b6e-4ec8-4a9b-b11d-25c5dc27fce7",
+    "user_id": "9c3a7d51-3b9e-49e5-b899-50c9e39949f7",
+    "user_name": "teste3",
+    "user_user": "teste3",
+    "media_name": "Jurassic Park: O Parque dos Dinossauros",
+    "content": "Achei algumas partes do enredo previsíveis, mas ainda assim é um clássico!",
+    "amountLikes": 0,
+    "created_at": "12/12/2024, 15:35:00"
+  },
+  {
+    "avaliation_id": "f1a2c53d-c03c-4516-a1d5-7a4387d5e924",
+    "user_id": "ea9485f0-7f8c-4f67-8415-1b5d75b1236d",
+    "user_name": "teste4",
+    "user_user": "teste4",
+    "media_name": "Jurassic Park: O Parque dos Dinossauros",
+    "content": "Minha família assistiu junta e todos adoraram. Nostálgico!",
+    "amountLikes": 0,
+    "created_at": "12/12/2024, 15:40:27"
+  },
+  {
+    "avaliation_id": "6d27a1f2-60f8-48e1-a3f3-c826cdd2b6a6",
+    "user_id": "c91d5ad3-7cfc-4db8-907e-d98a6e3a9bd1",
+    "user_name": "Beatriz",
+    "user_user": "biazinha",
+    "media_name": "Jurassic Park: O Parque dos Dinossauros",
+    "content": "Não envelheceu bem para mim, mas entendo por que é amado.",
+    "amountLikes": 0,
+    "created_at": "12/12/2024, 15:45:10"
+  }
+]
