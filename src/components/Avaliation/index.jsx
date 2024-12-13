@@ -42,10 +42,12 @@ const Avaliation = ({ avaliation }) => {
       const newLikes = likes.filter((l) => l.avaliation_id !== avaliation.id);
       localStorage.setItem("mylikes", JSON.stringify(newLikes));
       setLiked(false);
+      setAmountLikes(amountLikes - 1);
     } else {
       const newLike = { user_id: user.id, avaliation_id: avaliation.id };
       localStorage.setItem("mylikes", JSON.stringify([...likes, newLike]));
       setLiked(true);
+      setAmountLikes(amountLikes + 1);
     }
   }
 
@@ -115,7 +117,7 @@ const Avaliation = ({ avaliation }) => {
             name={liked ? "heart" : "heart-outline"}
           ></ion-icon>
         </button>
-        {user.id !== avaliation.user_id && (
+        {user.user !== avaliation.user_user && (
           <Link to={`/${mainPath}/user/${avaliation.user_user}`}>
             <ion-icon name="person-outline"></ion-icon>
           </Link>
