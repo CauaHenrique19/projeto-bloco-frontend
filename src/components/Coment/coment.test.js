@@ -54,14 +54,14 @@ describe("Coment Component", () => {
     fireEvent.click(likeButton);
     expect(screen.getByText("1")).toBeInTheDocument();
 
-    const savedLikes = JSON.parse(localStorage.getItem("mylikes") || "[]");
+    const savedLikes = JSON.parse(localStorage.getItem("likes") || "[]");
     expect(savedLikes).toHaveLength(1);
     expect(savedLikes[0].coment_id).toBe("coment1");
 
     fireEvent.click(likeButton);
     expect(screen.getByText("0")).toBeInTheDocument();
 
-    const updatedLikes = JSON.parse(localStorage.getItem("mylikes") || "[]");
+    const updatedLikes = JSON.parse(localStorage.getItem("likes") || "[]");
     expect(updatedLikes).toHaveLength(0);
   });
 

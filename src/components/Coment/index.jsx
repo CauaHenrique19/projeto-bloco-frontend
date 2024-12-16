@@ -14,28 +14,33 @@ const Coment = ({ coment }) => {
   const [amountLikes, setAmountLikes] = useState(0);
 
   useEffect(() => {
-    const likes = JSON.parse(localStorage.getItem("mylikes")) || [];
-    const existentLike = likes.find((l) => l.coment_id === coment.id);
+    const likes = JSON.parse(localStorage.getItem("likes")) || [];
+    const existentMyLike = likes.find(
+      (l) => l.coment_id === coment.id && user.id === l.user_id
+    );
 
     setAmountLikes(likes.filter((like) => like.coment_id === coment.id).length);
 
-    if (existentLike) {
+    if (existentMyLike) {
       setLiked(true);
-      setLike(existentLike);
+      setLike(existentMyLike);
     }
   }, [coment]);
 
   function handleLike() {
-    const likes = JSON.parse(localStorage.getItem("mylikes")) || [];
+    const likes = JSON.parse(localStorage.getItem("likes")) || [];
 
     if (liked) {
-      const newLikes = likes.filter((l) => l.coment_id !== coment.id);
-      localStorage.setItem("mylikes", JSON.stringify(newLikes));
+      const index = likes.findIndex(
+        (l) => l.coment_id === coment.id && user.id === l.user_id
+      );
+      likes.splice(index, 1);
+      localStorage.setItem("likes", JSON.stringify(likes));
       setLiked(false);
       setAmountLikes(amountLikes - 1);
     } else {
       const newLike = { user_id: user.id, coment_id: coment.id };
-      localStorage.setItem("mylikes", JSON.stringify([...likes, newLike]));
+      localStorage.setItem("likes", JSON.stringify([...likes, newLike]));
       setLiked(true);
       setAmountLikes(amountLikes + 1);
     }
